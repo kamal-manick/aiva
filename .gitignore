@@ -1,0 +1,32 @@
+# Rust build artifacts
+/target/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+backend/build/
+backend/dist/
+backend/specs/
+*.spec
+
+# Models (large binary files - download via settings.json)
+models/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Distribution
+package/dist/
+
+# Environment
+.env
+*.exe

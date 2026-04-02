@@ -1,0 +1,26 @@
+{
+  "models": {
+    "llm": {
+      "path": "models/model.gguf",
+      "download_url": "https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf"
+    },
+    "stt": {
+      "cache_dir": "models/hf_cache"
+    },
+    "tts": {
+      "model_path": "models/tts/piper/model.onnx",
+      "config_path": "models/tts/piper/model.onnx.json",
+      "download_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx",
+      "config_download_url": "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx.json"
+    }
+  },
+  "tts_settings": {
+    "speaker_id": 0,
+    "length_scale": 0.9,
+    "noise_scale": 0.6,
+    "noise_w_scale": 0.3
+  },
+  "llm_settings": {
+    "ctx_length": 0
+  }
+}
