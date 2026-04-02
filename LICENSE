@@ -1,0 +1,40 @@
+MIT License
+
+Copyright (c) 2026 Kamal Manick
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Model Licenses
+
+This project uses the following AI models, each governed by their own license.
+Users must comply with these licenses when downloading or using the models.
+
+| Model | License | Link |
+|-------|---------|------|
+| Qwen3 0.6B | Apache 2.0 | https://huggingface.co/unsloth/Qwen3-0.6B-GGUF |
+| Whisper (faster-whisper) | MIT | https://github.com/SYSTRAN/faster-whisper |
+| Piper TTS | MIT | https://github.com/rhasspy/piper |
+| Piper voices (libritts_r) | Public domain (LibriTTS-R) | https://huggingface.co/rhasspy/piper-voices |
+
+## Third-Party Library Licenses
+
+Rust and Python dependencies are governed by their respective licenses.
+See `Cargo.toml` and `backend/requirements.txt` for the full dependency list.

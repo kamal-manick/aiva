@@ -41,7 +41,7 @@ New-Item -ItemType Directory -Path $outputFolder -Force | Out-Null
 Write-Host ""
 Write-Host "Step 1: Rust frontend (AIVA.exe)..." -ForegroundColor Green
 
-$rustExe = Join-Path $rootFolder "target\release\rust_exercise9.exe"
+$rustExe = Join-Path $rootFolder "target\release\aiva.exe"
 $needRustBuild = $RebuildRust -or (-not (Test-Path $rustExe))
 
 if ($needRustBuild) {

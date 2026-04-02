@@ -2,13 +2,11 @@
 
 > Offline voice-to-voice AI assistant with <10s end-to-end latency, built on a Rust frontend and Python backend with optimized local inference -- no cloud dependencies.
 
-> **Reference Implementation** -- Production system deployed privately. This repo demonstrates architecture and design patterns only.
-
 ## About This Repository
 
-I built and deployed the production version of this system in an enterprise environment. This repository is a sanitized reference implementation -- it reflects the real architecture, design decisions, and engineering patterns, with proprietary business logic replaced by clean stubs and generalizations.
+This is the complete source code for AIVA -- a privacy-first local AI voice assistant I designed and built as sole developer. The full pipeline (speech-to-text, LLM reasoning, text-to-speech) runs entirely offline on CPU hardware with no cloud dependencies.
 
-For questions about the production implementation or design decisions, feel free to connect on LinkedIn: [linkedin.com/in/kamal-manick](https://linkedin.com/in/kamal-manick)
+For questions about design decisions or the project, feel free to connect on LinkedIn: [linkedin.com/in/kamal-manick](https://linkedin.com/in/kamal-manick)
 
 ## Problem Statement
 
@@ -173,4 +171,4 @@ aiva/
 
 ## License
 
-This is a reference implementation for portfolio purposes. See individual model licenses for the AI models used (Qwen3, Whisper, Piper).
+This project is licensed under the [MIT License](LICENSE). AI models used (Qwen3, Whisper, Piper) are governed by their respective licenses -- see [LICENSE](LICENSE) for details.

@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Report a bug in the reference implementation
+about: Report a bug
 title: "[Bug] "
 labels: bug
 assignees: ''

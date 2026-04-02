@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for your interest in AIVA. This repository is a sanitized reference implementation of a production system, published as a portfolio piece. Contributions that improve documentation, fix bugs, or extend the reference architecture are welcome.
+Thank you for your interest in AIVA. Contributions that improve documentation, fix bugs, or extend the architecture are welcome.
 
 ## Getting Started
 
