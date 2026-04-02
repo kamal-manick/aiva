@@ -8,6 +8,49 @@ AIVA is a two-process desktop application: a Rust frontend handling the user int
 
 The fundamental design constraint is **latency on CPU hardware**. Every architectural decision optimizes for minimizing the time between the user finishing a spoken question and hearing the first word of the response.
 
+### Component Overview
+
+```mermaid
+graph LR
+    subgraph "Rust Process"
+        UI[ChatApp<br/>egui UI]
+        REC[AudioRecorder<br/>cpal]
+        STT_C[STTModel<br/>Client]
+        LLM_C[AIModel<br/>Client]
+        TTS_C[TTSModel<br/>Client]
+        PLAY[Audio Playback<br/>rodio Sink]
+        BE[AIVAEngine<br/>Process Manager]
+    end
+
+    subgraph "Python Process (AIVAEngine)"
+        STT_S[STTService<br/>faster-whisper]
+        LLM_S[LLMService<br/>llama-cpp-python]
+        TTS_S[TTSService<br/>Piper TTS]
+    end
+
+    UI -->|Start/Stop| REC
+    REC -->|WAV bytes| STT_C
+    STT_C -->|base64 JSON| BE
+    BE -->|stdin| STT_S
+    STT_S -->|stdout| BE
+    BE -->|transcription| STT_C
+    STT_C -->|text| UI
+
+    UI -->|user message| LLM_C
+    LLM_C -->|JSON| BE
+    BE -->|stdin| LLM_S
+    LLM_S -->|streaming tokens| BE
+    BE -->|tokens| LLM_C
+    LLM_C -->|response| UI
+
+    UI -->|response text| TTS_C
+    TTS_C -->|JSON| BE
+    BE -->|stdin| TTS_S
+    TTS_S -->|audio chunks| BE
+    BE -->|WAV chunks| TTS_C
+    TTS_C -->|decoded audio| PLAY
+```
+
 ## Data Flow Walkthrough
 
 ### Voice Input Path
@@ -35,6 +78,49 @@ The fundamental design constraint is **latency on CPU hardware**. Every architec
 9. **Streaming Audio**: Piper TTS synthesizes audio in sentence-sized chunks. Each chunk is encoded as a WAV, base64-encoded, and sent as `{"type": "audio_chunk", "audio": "<base64>"}`. The Rust frontend decodes each chunk and appends it to a `rodio::Sink` for immediate playback.
 
 10. **Playback**: Audio chunks play sequentially through the sink. The user hears the first sentence while later sentences are still being synthesized. An `{"type": "audio_done"}` message signals completion, and the frontend waits for the sink to drain.
+
+### End-to-End Sequence
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant UI as ChatApp (Rust)
+    participant REC as AudioRecorder
+    participant ENG as AIVAEngine (Python)
+    participant PLAY as Audio Playback
+
+    Note over User,PLAY: Voice Input Flow
+    User->>UI: Click Mic
+    UI->>REC: start_recording()
+    REC-->>REC: Capture audio (cpal)
+    User->>UI: Click Stop
+    UI->>REC: stop_recording()
+    REC-->>UI: WAV bytes (16kHz mono)
+
+    Note over User,PLAY: Speech-to-Text
+    UI->>ENG: {"cmd":"transcribe", "audio":"<base64>"}
+    ENG-->>ENG: faster-whisper inference
+    ENG->>UI: {"type":"transcription", "text":"Hello"}
+
+    Note over User,PLAY: LLM Reasoning (Streaming)
+    UI->>ENG: {"cmd":"generate", "messages":[...]}
+    ENG->>UI: {"type":"generation_start"}
+    loop For each token
+        ENG->>UI: {"type":"token", "token":"Hi"}
+        UI-->>UI: Append to streaming display
+    end
+    ENG->>UI: {"type":"generation_end", "full_response":"Hi there!"}
+
+    Note over User,PLAY: Text-to-Speech (Streaming)
+    UI->>ENG: {"cmd":"synthesize", "text":"Hi there!", "streaming":true}
+    loop For each sentence chunk
+        ENG->>UI: {"type":"audio_chunk", "audio":"<base64 WAV>"}
+        UI->>PLAY: Decode + queue in rodio Sink
+        PLAY-->>User: Audio output begins
+    end
+    ENG->>UI: {"type":"audio_done"}
+    PLAY-->>User: Remaining audio plays out
+```
 
 ## Component Interface Contracts
 
