@@ -89,6 +89,66 @@ Rust handles the GUI, audio I/O, and process management -- things where startup 
 | Config | JSON (settings.json) | Model paths, download URLs, voice parameters |
 | Packaging | PyInstaller + Cargo release | Two distribution modes: bundled and download-on-first-run |
 
+## Installation
+
+### Prerequisites
+
+- **Rust** 1.75+ with Cargo ([install](https://rustup.rs/))
+- **Python** 3.10+ with pip
+- **Windows** 10/11 (64-bit) -- primary target
+- A microphone and speakers/headphones
+- 4GB+ RAM recommended
+
+### Build from Source
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/kamal-manick/aiva.git
+cd aiva
+
+# 2. Copy the config template
+cp settings.example.json settings.json
+
+# 3. Set up the Python backend
+cd backend
+python -m venv .
+Scripts/pip install -r requirements.txt
+cd ..
+
+# 4. Build and run
+cargo run
+```
+
+On first launch, models will download automatically (~500MB total). The UI will show progress as each model loads.
+
+### Pre-download Models (Optional)
+
+For air-gapped or faster startup, download models manually before first run:
+
+```bash
+# LLM (Qwen3 0.6B, ~400MB)
+mkdir -p models
+curl -L -o models/model.gguf https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf
+
+# TTS (Piper libritts_r, ~75MB)
+mkdir -p models/tts/piper
+curl -L -o models/tts/piper/model.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx
+curl -L -o models/tts/piper/model.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx.json
+
+# STT (Whisper base) -- downloads automatically via faster-whisper on first use
+```
+
+### Package for Distribution
+
+To build a standalone distributable (no Rust/Python toolchain needed to run):
+
+```powershell
+cd package
+.\package.ps1
+```
+
+This produces a ZIP containing `AIVA.exe`, `AIVAEngine.exe`, models, and launcher scripts. See [Distribution Modes](#distribution-modes) below.
+
 ## Configuration
 
 Copy `settings.example.json` to `settings.json` and customize:
